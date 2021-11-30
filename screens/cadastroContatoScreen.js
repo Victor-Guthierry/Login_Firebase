@@ -1,32 +1,68 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { Image, TextInput, TouchableOpacity, Touchable } from 'react-native';
+import axios from 'axios';
 
-export default function CadastroContatoScreen({ navigation }) {
+
+export default function CadastroContatoScreen({ route, navigation }) {
+
+    const [getNome, setNome] = useState("");
+    const [getEmail, setEmail] = useState("");
+    const [getCpf, setCpf] = useState("");
+    const [getTelefone, setTelefone] = useState("");
+
+   function inserirDados(){
+
+      axios.post('http://professornilson.com/testeservico/clientes', {
+          nome: getNome,
+          email: getEmail,
+          telefone: getTelefone,
+          cpf: getCpf
+          }).then(function (response) {
+            navigation.navigate("ListaContatos")
+            console.log(response);
+          }).catch(function (error) {
+            console.log(error);
+      
+      });
+      
+    } 
+    
 
   return (
     <View style={styles.container}>
       <Text style={{marginRight: 240,fontWeight: 'bold', fontSize: 20,}}>Nome</Text>
       <TextInput
         style={styles.input}
+        onChangeText={text => setNome(text)}
         placeholder="Digite seu nome"
       />
 
-      <Text style={{marginRight: 240,fontWeight: 'bold', fontSize: 20,}}>Email</Text>
+<Text style={{marginRight: 240,fontWeight: 'bold', fontSize: 20,}}>Email</Text>
       <TextInput
         style={styles.input}
+        onChangeText={text => setEmail(text)}
         placeholder="Digite seu email"
+      />
+
+      <Text style={{marginRight: 258,fontWeight: 'bold', fontSize: 20,}}>CPF</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={text => setCpf(text)}
+        placeholder="Digite seu cpf"
       />
 
       <Text style={{marginRight: 213,fontWeight: 'bold', fontSize: 20,}}>Telefone</Text>
       <TextInput
-        style={styles.input} 
+        style={styles.input}
+        onChangeText={text => setTelefone(text)} 
         placeholder="Digite seu telefone"
       />
 
       <TouchableOpacity    
         style={styles.botao}
+        onPress={() => inserirDados()}
       >
         <Text style={{fontSize: 16, fontWeight: 'bold', color: '#fff'}}>Salvar</Text>
       </TouchableOpacity>
